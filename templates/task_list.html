@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}My tasks{% endblock title %}
+
+{% block content %}
+
+    <h2>My tasks</h2>
+    <ul>
+        {% for task in tasks %}
+        <li>{{ task.title }}</li>
+        {% empty %}
+        <p>You have no tasks yet.</p>
+    {% endfor %}
+    </ul>
+
+    <h4>Add a New Task</h4>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">+Add Task</button>
+    </form>
+    
+
+{% endblock content %}
