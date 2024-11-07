@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView
@@ -7,6 +6,7 @@ from .forms import SignUpForm
 from .models import CustomUser
 
 # Create your views here.
+
 
 class SignUpView(CreateView):
     model = CustomUser
