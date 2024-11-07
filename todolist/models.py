@@ -4,6 +4,7 @@ from django.utils import timezone
 
 # Create your models here.
 
+
 class Task(models.Model):
     PENDING = 'pending'
     COMPLETED = 'completed'
@@ -11,7 +12,7 @@ class Task(models.Model):
         (PENDING, 'Pending'),
         (COMPLETED, 'Completed')
     )
-    
+
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     status = models.CharField(
@@ -27,11 +28,9 @@ class Task(models.Model):
         on_delete=models.CASCADE,
         related_name='tasks'
     )
-    
-    
+
     def mark_as_completed(self):
         """Change task status to 'completed' and set completion date""" 
         self.status = self.COMPLETED
         self.completed_at = timezone.now().date()
         self.save()
-      

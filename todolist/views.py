@@ -1,8 +1,10 @@
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, CreateView
 from .models import Task
-from .forms import TaskForm
+from .forms import TaskForm, TaskDetailForm
+
 
 # Create your views here.
 
@@ -35,3 +37,13 @@ class TaskListView(LoginRequiredMixin, ListView):
             return redirect('task_list')
         return self.get(request, *args, **kwargs)
 
+
+class AddTaskView(LoginRequiredMixin, CreateView):
+    model = Task
+    form_class = TaskDetailForm
+    template_name = "add_task.html"
+    success_url = reverse_lazy('task_list')
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
