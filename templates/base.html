@@ -9,7 +9,7 @@
 
     <body>
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="{% url 'home' %}">ToDo List</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -35,8 +35,8 @@
                                 <a class="dropdown-item" href="#">Logout</a>
                             {% else %}
                                 <!-- Menu for unlogged user -->
-                                <a class="dropdown-item" href="#">Register</a>
-                                <a class="dropdown-item" href="#">Login</a>
+                                <a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a>
+                                <a class="dropdown-item" href="{% url 'login' %}">Login</a>
                             {% endif %}
                         </div>
                     </li>
@@ -44,8 +44,11 @@
             </div>
         </nav>
         
-        {% block content %}
-        {% endblock content %}
+        <div class="container">
+            {% block content %}
+            {% endblock content %}
+        </div>
+        
 
         <footer class="text-center mt-4"><p>&copy; 2024 ToDo List</p></footer>
 
