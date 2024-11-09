@@ -1,9 +1,9 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, View
 
 from .models import Task
 from .forms import TaskForm, TaskDetailForm, TaskUpdateForm
@@ -67,3 +67,16 @@ class EditTaskView(UpdateView):
         # add success message after saving the form
         messages.success(self.request, "Task was updated succesfully!")
         return response
+
+
+class MarkTaskAsCompletedView(View):
+    def post(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        if task.completed_at:
+            task.completed_at = None
+            task.status = task.PENDING
+        elif not task.completed_at:
+            task.mark_as_completed()
+
+        task.save()
+        return redirect("task_list")

@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.contrib import messages
 from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, UpdateView
 
@@ -27,3 +28,10 @@ class UserEditView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def form_valid(self, form):
+        """Adding a message for user after saving changes"""
+        response = super().form_valid(form)
+        # add success message after saving the form
+        messages.success(self.request, "Profile updated successfully!")
+        return response

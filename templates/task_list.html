@@ -6,39 +6,50 @@
 
 {% block content %}
 
-        <div class="row align-items-center">
-            <div class="col">
-                <h2>My tasks</h2>
-            </div>
-            <div class="col text-end">
-                <a href="{% url 'add_task' %}" class="btn btn-primary">+ Create New Task</a>
-            </div>
-        </div>
-    
-        <ul>
-            {% for task in tasks %}
-            <li>
-                <h5>
-                    <a href="{% url 'task_update' pk=task.id %}" class="text-decoration-none text-dark">
-                        {{ task.title }}</a>
-                    
-                </h5>
-                {% if task.description %}
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h2>My tasks</h2>
+    </div>
+    <div class="col text-end">
+        <a href="{% url 'add_task' %}" class="btn btn-primary">+ Create New Task</a>
+    </div>
+</div>
+
+{% for task in tasks %}
+    <div class="task d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h5 class="mb-0">
+                <a href="{% url 'task_update' pk=task.id %}" class="text-decoration-none text-dark">
+                    {{ task.title }}
+                </a>
+            </h5>
+
+            {% if task.description %}
                 <p>{{ task.description }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="d-flex align-items-center">
+            <form action="{% url 'task_completed' pk=task.id %}" method="post">
+                {% csrf_token %}
+                
+                {% if task.completed_at %}
+                    <button type="submit" class="btn btn-success btn-sm">Completed</button>
+                {% else %}
+                    <button type="submit" class="btn btn-outline-success btn-sm">Mark as Completed</button>
                 {% endif %}
-            </li>
-            {% empty %}
-            <p>You have no tasks yet.</p>
-        {% endfor %}
-        </ul>
-    
-        <h4>Add a New Task</h4>
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-primary">+Add Task</button>
-        </form>
-    
-    
+            </form>
+        </div>
+    </div>
+{% empty %}
+    <p>You have no tasks yet.</p>
+{% endfor %}
+
+<h4>Add a New Task</h4>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">+ Add Task</button>
+</form>
 
 {% endblock content %}
