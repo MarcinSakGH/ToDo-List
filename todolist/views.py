@@ -1,9 +1,12 @@
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, CreateView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView
+
 from .models import Task
-from .forms import TaskForm, TaskDetailForm
+from .forms import TaskForm, TaskDetailForm, TaskUpdateForm
 
 
 # Create your views here.
@@ -47,3 +50,20 @@ class AddTaskView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class EditTaskView(UpdateView):
+    model = Task
+    form_class = TaskUpdateForm
+    template_name = "task_update.html"
+
+    def get_success_url(self):
+        success_url = reverse_lazy("task_update", kwargs={"pk": self.object.pk})
+        return success_url
+
+    def form_valid(self, form):
+        """Adding a message for user after saving changes"""
+        response = super().form_valid(form)
+        # add success message after saving the form
+        messages.success(self.request, "Task was updated succesfully!")
+        return response

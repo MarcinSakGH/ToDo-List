@@ -18,7 +18,11 @@
         <ul>
             {% for task in tasks %}
             <li>
-                <h5>{{ task.title }}</h5>
+                <h5>
+                    <a href="{% url 'task_update' pk=task.id %}" class="text-decoration-none text-dark">
+                        {{ task.title }}</a>
+                    
+                </h5>
                 {% if task.description %}
                 <p>{{ task.description }}</p>
                 {% endif %}
