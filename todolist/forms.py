@@ -1,5 +1,6 @@
 from django import forms
 from .models import Task
+from django.core.exceptions import ValidationError
 
 
 class TaskForm(forms.ModelForm):
@@ -34,3 +35,16 @@ class TaskUpdateForm(forms.ModelForm):
             "created_at": forms.DateInput(attrs={"type": "date"}),
             "completed_at": forms.DateInput(attrs={"type": "date"}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get("status")
+        completed_at = cleaned_data.get("completed_at")
+
+        if status == Task.PENDING and completed_at is not None:
+            raise ValidationError("Pending task cannot have a completion date!")
+
+        if status == Task.COMPLETED and completed_at is None:
+            raise ValidationError("Completed task must have a completion date!")
+
+        return cleaned_data
