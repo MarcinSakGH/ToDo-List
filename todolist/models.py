@@ -6,31 +6,22 @@ from django.utils import timezone
 
 
 class Task(models.Model):
-    PENDING = 'pending'
-    COMPLETED = 'completed'
-    STATUS_CHOICES = (
-        (PENDING, 'Pending'),
-        (COMPLETED, 'Completed')
-    )
+    PENDING = "pending"
+    COMPLETED = "completed"
+    STATUS_CHOICES = ((PENDING, "Pending"), (COMPLETED, "Completed"))
 
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    status = models.CharField(
-        max_length=10,
-        choices=STATUS_CHOICES,
-        default=PENDING
-    )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING)
     due_date = models.DateField(null=True, blank=True)
     created_at = models.DateField(default=timezone.now)
     completed_at = models.DateField(null=True, blank=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='tasks'
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="tasks"
     )
 
     def mark_as_completed(self):
-        """Change task status to 'completed' and set completion date""" 
+        """Change task status to 'completed' and set completion date"""
         self.status = self.COMPLETED
         self.completed_at = timezone.now().date()
         self.save()

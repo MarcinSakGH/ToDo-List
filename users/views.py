@@ -12,7 +12,7 @@ class SignUpView(CreateView):
     model = CustomUser
     form_class = SignUpForm
     template_name = "signup.html"
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy("home")
 
 
 class CustomLoginView(LoginView):
@@ -22,8 +22,8 @@ class CustomLoginView(LoginView):
 class UserEditView(UpdateView):
     model = CustomUser
     form_class = CustomUserForm
-    template_name = 'user_edit.html'
-    success_url = reverse_lazy('user_edit')
-    
+    template_name = "user_edit.html"
+    success_url = reverse_lazy("user_edit")
+
     def get_object(self, queryset=None):
         return self.request.user
