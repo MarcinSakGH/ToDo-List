@@ -47,12 +47,13 @@ class TestViews(TestCase):
         self.user, self.task = create_user_and_task()
 
     def test_task_list_view(self):
-        print("username", self.user.username)  # Powinno wypisać "pluto"
+        """Test TaskListView"""
+        print("username", self.user.username)
         print("is pass ok:", self.user.check_password("testpassword-123"))
         login_successful = self.client.login(
             username="testuser", password="testpassword-123"
         )
-        print(f"Login successful: {login_successful}")  # Wydrukuj wynik logowania
+        print(f"Login successful: {login_successful}")
 
         url = reverse("task_list")
         response = self.client.get(url)
