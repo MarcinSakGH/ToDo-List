@@ -3,7 +3,14 @@ from django.urls import reverse_lazy
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, View
+from django.views.generic import (
+    TemplateView,
+    ListView,
+    CreateView,
+    UpdateView,
+    View,
+    DeleteView,
+)
 
 from .models import Task
 from .forms import TaskForm, TaskDetailForm, TaskUpdateForm
@@ -80,3 +87,9 @@ class MarkTaskAsCompletedView(View):
 
         task.save()
         return redirect("task_list")
+
+
+class DeleteTaskView(DeleteView):
+    model = Task
+    template_name = "task_confirm_delete.html"
+    success_url = reverse_lazy("task_list")

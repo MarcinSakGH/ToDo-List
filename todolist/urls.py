@@ -5,6 +5,7 @@ from .views import (
     AddTaskView,
     EditTaskView,
     MarkTaskAsCompletedView,
+    DeleteTaskView,
 )
 
 urlpatterns = [
@@ -17,4 +18,5 @@ urlpatterns = [
         MarkTaskAsCompletedView.as_view(),
         name="task_completed",
     ),
+    path("delete-task/<int:pk>/", DeleteTaskView.as_view(), name="task_delete"),
 ]

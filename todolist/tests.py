@@ -3,7 +3,9 @@ from django.urls import reverse
 from django.test import TestCase
 from django.utils import timezone
 from django.test.client import Client
+
 from .models import Task
+from .forms import TaskUpdateForm
 
 
 # Create your tests here.
@@ -48,14 +50,33 @@ class TestViews(TestCase):
 
     def test_task_list_view(self):
         """Test TaskListView"""
-        print("username", self.user.username)
-        print("is pass ok:", self.user.check_password("testpassword-123"))
         login_successful = self.client.login(
             username="testuser", password="testpassword-123"
         )
-        print(f"Login successful: {login_successful}")
-
         url = reverse("task_list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "task_list.html")
+
+    def test_task_update_view(self):
+        """Test EditTaskView"""
+        self.client.login(username=self.user.username, password=self.user.password)
+        url = reverse("task_update", args=[self.task.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "task_update.html")
+        # Check if form is present in the context
+        form = response.context.get("form")
+        self.assertIsInstance(form, TaskUpdateForm)
+        updated_data = {
+            "title": "Updated Task",
+            "description": "Updated Description",
+            "status": Task.PENDING,
+            "due_date": "2024-12-31",
+            "created_at": "2024-01-01",
+        }
+        # Send the updated data via POST request and check if the task data is updated in the database
+        response = self.client.post(url, data=updated_data)
+        self.task.refresh_from_db()
+        self.assertEqual(self.task.title, "Updated Task")
+        self.assertEqual(self.task.description, "Updated Description")
