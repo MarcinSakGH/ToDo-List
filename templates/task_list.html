@@ -15,6 +15,19 @@
     </div>
 </div>
 
+        <!-- button to for changing filtering options -->
+    <button onclick="toggleFilter()" class="btn btn-primary mb-3">
+        Filter
+    </button>
+
+    <!-- filtering options - hidden by defualt -->
+    <div id="filterOptions" style="display: none;" class="border p-3 rounded">
+        <h5>Filter tasks</h5>
+        <a href="{% url 'task_list' %}?status=pending" class="btn btn-outline-secondary w-100 mb-2">Pending Tasks</a><br>
+        <a href="{% url 'task_list' %}?status=completed" class="btn btn-outline-secondary w-100 mb-2">Completed Tasks</a><br>
+        <a href="{% url 'task_list' %}" class="btn btn-outline-secondary w-100 mb-2">All Tasks</a>
+    </div>
+
 {% for task in tasks %}
     <div class="task d-flex justify-content-between align-items-start mb-3">
         <div>
@@ -55,5 +68,22 @@
     {{ form|crispy }}
     <button type="submit" class="btn btn-primary">+ Add Task</button>
 </form>
+
+<script>
+    function toggleFilter() {
+        var filterOptions = document.getElementById("filterOptions");
+        if (filterOptions.style.display === "none") {
+            filterOptions.style.display = "block";
+        } else {
+            filterOptions.style.display = "none";
+        }
+    }
+    
+
+    // Function for changing the button text
+    function updateFilterText(filterName) {
+        document.getElementById('filterButton').innerText = filterName;
+    }
+    </script>
 
 {% endblock content %}

@@ -31,7 +31,12 @@ class TaskListView(LoginRequiredMixin, ListView):
     login_url = "login"
 
     def get_queryset(self):
-        return Task.objects.filter(user=self.request.user)
+        queryset = Task.objects.filter(user=self.request.user)
+        status_filter = self.request.GET.get("status")
+        # If the status parameter is specified, filter tasks based on it
+        if status_filter in ["pending", "completed"]:
+            queryset = queryset.filter(status=status_filter)
+        return queryset
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
