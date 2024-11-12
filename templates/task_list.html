@@ -18,7 +18,18 @@
         <!-- button to for changing filtering options -->
     <button onclick="toggleFilter()" class="btn btn-primary mb-3">
         Filter
-    </button>
+    </button> *
+    
+    <!-- Display the current filter next to the button -->
+    <span class="ml-2">
+        {% if request.GET.status == 'pending' %}
+            Pending Tasks
+        {% elif request.GET.status == 'completed' %}
+            Completed Tasks
+        {% else %}
+            All Tasks
+        {% endif %}
+    </span>
 
     <!-- filtering options - hidden by defualt -->
     <div id="filterOptions" style="display: none;" class="border p-3 rounded">
