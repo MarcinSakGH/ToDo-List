@@ -45,6 +45,9 @@
         <div class="d-flex align-items-center">
             <form action="{% url 'task_completed' pk=task.id %}" method="post">
                 {% csrf_token %}
+
+                <!-- Pass the current filter as a hidden parameter -->
+                <input type="hidden" name="status" value="{{ request.GET.status|default:'all' }}">
                 
                 {% if task.completed_at %}
                     <button type="submit" class="btn btn-success btn-sm">Completed</button>
@@ -79,11 +82,6 @@
         }
     }
     
-
-    // Function for changing the button text
-    function updateFilterText(filterName) {
-        document.getElementById('filterButton').innerText = filterName;
-    }
     </script>
 
 {% endblock content %}
