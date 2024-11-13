@@ -36,6 +36,15 @@ class TaskListView(LoginRequiredMixin, ListView):
         # If the status parameter is specified, filter tasks based on it
         if status_filter in ["pending", "completed"]:
             queryset = queryset.filter(status=status_filter)
+
+        sort_by = self.request.GET.get("sort", "created_at")
+        if sort_by == "created_at":
+            queryset = queryset.order_by("created_at")
+        elif sort_by == "completed_at":
+            queryset = queryset.order_by("completed_at")
+        elif sort_by == "due_date":
+            queryset = queryset.order_by("due_date")
+
         return queryset
 
     def get_context_data(self, *args, **kwargs):
@@ -94,7 +103,8 @@ class MarkTaskAsCompletedView(View):
 
         # Retrieve the current filter from the request and redirect back to TaskListView with the filter applied
         filter_status = request.POST.get("status", "all")
-        return redirect(f"/task-list/?status={filter_status}")
+        sort_by = request.GET.get("sort", "created_at")
+        return redirect(f"/task-list/?sort={sort_by}&status={filter_status}")
 
 
 class DeleteTaskView(DeleteView):

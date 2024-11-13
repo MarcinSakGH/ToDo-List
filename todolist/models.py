@@ -13,7 +13,7 @@ class Task(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING)
-    due_date = models.DateField(null=True, blank=True)
+    due_date = models.DateField(default=timezone.now, blank=True, null=True)
     created_at = models.DateField(default=timezone.now)
     completed_at = models.DateField(null=True, blank=True)
     user = models.ForeignKey(

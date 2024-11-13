@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from .models import Task
 from django.core.exceptions import ValidationError
 
@@ -11,6 +12,8 @@ class TaskForm(forms.ModelForm):
 
 class TaskDetailForm(forms.ModelForm):
     due_date = forms.DateField(
+        required=False,
+        initial=timezone.now().date(),
         widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
     )
 
