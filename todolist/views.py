@@ -103,7 +103,7 @@ class MarkTaskAsCompletedView(View):
 
         # Retrieve the current filter from the request and redirect back to TaskListView with the filter applied
         filter_status = request.POST.get("status", "all")
-        sort_by = request.GET.get("sort", "created_at")
+        sort_by = request.POST.get("sort", "created_at")
         return redirect(f"/task-list/?sort={sort_by}&status={filter_status}")
 
 

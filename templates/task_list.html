@@ -39,7 +39,7 @@
 <!-- Display the current sort option next to the button -->
     <span class="ml-2">
         {% if request.GET.sort == 'created_at' %}
-            Sort by Date Added
+            Sort by Creation Date
         {% elif request.GET.sort == 'completed_at' %}
             Sort by Completion Date
         {% elif request.GET.sort == 'due_date' %}
@@ -67,7 +67,7 @@
     <div id="sortOptions" style="display: none;" class="border p-3 rounded mt-2">
         <h5>Sort tasks</h5>
         <a href="{% url 'task_list' %}?sort=created_at&status={{ request.GET.status|default:'all' }}" class="btn btn-outline-secondary w-100 mb-2">
-            Sort by Date Added
+            Sort by Creation Date
         </a><br>
         <a href="{% url 'task_list' %}?sort=completed_at&status={{ request.GET.status|default:'all' }}" class="btn btn-outline-secondary w-100 mb-2">
             Sort by Completion Date
@@ -101,8 +101,10 @@
             <form action="{% url 'task_completed' pk=task.id %}" method="post">
                 {% csrf_token %}
 
-                <!-- Pass the current filter as a hidden parameter -->
+                <!-- Pass the current filter and sort as a hidden parameters -->
                 <input type="hidden" name="status" value="{{ request.GET.status|default:'all' }}">
+                <input type="hidden" name="sort" value="{{ request.GET.sort|default:'created_at' }}">
+
                 
                 {% if task.completed_at %}
                     <button type="submit" class="btn btn-success btn-sm">Completed</button>
