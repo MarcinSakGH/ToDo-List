@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -38,12 +38,12 @@ class TaskListView(LoginRequiredMixin, ListView):
             queryset = queryset.filter(status=status_filter)
 
         sort_by = self.request.GET.get("sort", "created_at")
-        if sort_by == "created_at":
-            queryset = queryset.order_by("created_at")
-        elif sort_by == "completed_at":
-            queryset = queryset.order_by("completed_at")
-        elif sort_by == "due_date":
-            queryset = queryset.order_by("due_date")
+        order = self.request.GET.get("order", "asc")
+
+        if sort_by in ["created_at", "completed_at", "due_date"]:
+            if order == "desc":
+                sort_by = f"-{sort_by}"  # add '-' prefix for descending order
+            queryset = queryset.order_by(sort_by)
 
         return queryset
 
@@ -110,4 +110,16 @@ class MarkTaskAsCompletedView(View):
 class DeleteTaskView(DeleteView):
     model = Task
     template_name = "task_confirm_delete.html"
-    success_url = reverse_lazy("task_list")
+
+    def get_success_url(self):
+        # get the current GET parameters to remain them after task deletion
+        status = self.request.POST.get("status", "")
+        sort = self.request.POST.get("sort", "created_at")
+        order = self.request.POST.get("order", "asc")
+
+        # Debug
+        print(f"Status: {status}, Sort: {sort}, Order: {order}")
+
+        # create URL with GET parameters
+        success_url = reverse("task_list")
+        return f"{success_url}?status={status}&sort={sort}&order={order}"
