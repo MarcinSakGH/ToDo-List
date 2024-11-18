@@ -113,9 +113,9 @@ class DeleteTaskView(DeleteView):
 
     def get_success_url(self):
         # get the current GET parameters to remain them after task deletion
-        status = self.request.POST.get("status", "")
-        sort = self.request.POST.get("sort", "created_at")
-        order = self.request.POST.get("order", "asc")
+        status = self.request.GET.get("status", "")
+        sort = self.request.GET.get("sort", "created_at")
+        order = self.request.GET.get("order", "asc")
 
         # Debug
         print(f"Status: {status}, Sort: {sort}, Order: {order}")
